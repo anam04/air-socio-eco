@@ -1,3 +1,57 @@
+# PM2.5 Delta Dashboard: WUSTL vs WRF-Chem
+
+This repository contains two HTML visualisations created for my independent study project on **Computational Air Quality Modelling**. The goal is to compare PM2.5 estimates from the **WUSTL** dataset and the **WRF-Chem** dataset over Delhi/North India.
+
+## Files
+
+### 1. Interactive PM2.5 Map
+
+This HTML file shows an interactive map of PM2.5 differences between WUSTL and WRF-Chem.
+
+Each grid-cell popup shows:
+
+- WUSTL PM2.5 value
+- WRF-Chem PM2.5 value
+- Delta value: `WUSTL - WRF-Chem`
+- Percentage difference
+- Distance to the nearest WRF-Chem point
+
+This map helps visually inspect where the two datasets differ spatially.
+
+### 2. PM2.5 Delta Analysis Charts
+
+This HTML file contains summary charts comparing WUSTL and WRF-Chem PM2.5 values.
+
+The charts include:
+
+- WUSTL vs WRF-Chem scatter plot
+- Distribution of delta values
+- Delta by region boxplot
+- Mean delta by region
+
+These charts help summarise whether one dataset is consistently estimating higher or lower PM2.5 values.
+
+## Purpose
+
+The purpose of these visualisations is to support exploratory comparison between two PM2.5 datasets. Since WUSTL and WRF-Chem are generated using different modelling approaches, their estimates can vary across space. These HTML outputs make those differences easier to inspect both visually and quantitatively.
+
+## How to View
+
+1. Download or clone this repository.
+2. Open the HTML files in a web browser such as Chrome, Edge, or Firefox.
+3. No additional installation is required.
+
+## Tools Used
+
+Python
+Pandas / GeoPandas
+Plotly
+Folium / Leaflet
+QGIS
+WUSTL PM2.5 data
+WRF-Chem PM2.5 data
+
+
 # BreatheSafe: Pollution-Aware Mobility Dashboard (Version 1)
 
 BreatheSafe is a frontend prototype dashboard designed to show how pollution data can support healthier and more conscious everyday mobility decisions. The dashboard is built from the user’s point of view and focuses on how pollutant markers can be translated into simple warnings, mobility scores, and practical route choices.
