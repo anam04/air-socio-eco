@@ -43,13 +43,4 @@ The dashboard provides warning-style messages to guide users in simple language.
 The prototype imagines how pollution insights could be integrated into mobility decisions, such as choosing whether to walk, cycle, take public transport, or use an alternate route.
 
 ## How to View the Dashboard
-
-There are two ways to view the dashboard.
-
-### Option 1: Download and Open the HTML File
-
-1. Open this GitHub repository.
-2. Click on the file named:
-
-```text
-WUSTL_WRF_MAP.html
+Click on "dashboard_version_2(1).html" and download the file in order to view it.
