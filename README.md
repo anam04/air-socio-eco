@@ -1,16 +1,17 @@
-# BreatheSafe: Pollution-Aware Mobility Dashboard
+# BreatheSafe: Pollution-Aware Mobility Dashboard (Version 1)
 
 BreatheSafe is a frontend prototype dashboard designed to show how pollution data can support healthier and more conscious everyday mobility decisions. The dashboard is built from the user’s point of view and focuses on how pollutant markers can be translated into simple warnings, mobility scores, and practical route choices.
+This dashboard was built in collaboration with Mrinalini Jindal and Mihika Grover, with the assistance of ChatGPT.
 
 ## Project Objective
 
-The objective of this prototype is to demonstrate how an air-pollution dashboard could look and feel before building a complete backend system. Instead of focusing on database architecture or real-time data pipelines, this version prioritizes the frontend experience, user interaction, and practical usefulness.
+The objective of this prototype is to demonstrate how an air-pollution dashboard could look and feel before building a complete backend system. Instead of focusing on database architecture, this version prioritizes the frontend experience, user interaction, and practical usefulness.
 
 The dashboard explores how individual pollutant markers can inform better mobility and more conscious everyday living from both a health and practical standpoint.
 
 ## Core Idea
 
-Air pollution is often presented as raw data, which may not be immediately useful for everyday users. BreatheSafe attempts to convert pollution-related information into clear, actionable insights.
+Air pollution is often presented as raw data, which may not be immediately useful for everyday users. This dashboard essentially attempts to convert pollution-related information into clear, actionable insights.
 
 For example, instead of only showing pollutant values, the dashboard helps users understand:
 
@@ -43,4 +44,27 @@ The dashboard provides warning-style messages to guide users in simple language.
 The prototype imagines how pollution insights could be integrated into mobility decisions, such as choosing whether to walk, cycle, take public transport, or use an alternate route.
 
 ## How to View the Dashboard
-Click on "dashboard_version_2(1).html" and download the file in order to view it.
+Click on "dashboard_version_1(2).html" and download the file in order to view it.
+
+# AirWatch Dashboard (Version 2)
+
+AirWatch is a static HTML dashboard prototype that shows how air pollution information can be presented in a simple, user-friendly way. It focuses on AQI, pollutant levels, health warnings, commute exposure, and nearby pollution hotspots. 
+This dashboard was built in collaboration with Mrinalini Jindal and Mihika Grover, with the assistance of Claude.
+
+## Objective
+
+The goal is to test the frontend design and usefulness of a pollution dashboard from the user’s point of view before building a full backend system.
+
+## Features
+
+- Current AQI overview
+- Pollutant breakdown: PM2.5, PM10, NO2, CO, O3, and SO2
+- Nearby pollution hotspots
+- Commute exposure guide
+- Health recommendations
+- Best times to go outside
+- Seven-day air quality forecast
+
+
+## How to View the Dashboard
+Click on "dashboard_version_2.html" and download the file in order to view it.
