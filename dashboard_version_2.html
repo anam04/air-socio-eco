@@ -1,0 +1,606 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); background: transparent; }
+
+  .db { padding: 0; }
+
+  .top-bar {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .top-bar-left { display: flex; align-items: center; gap: 10px; }
+  .top-bar-left h1 { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+  .top-bar-left span { font-size: 13px; color: var(--color-text-secondary); }
+  .loc-pill {
+    display: flex; align-items: center; gap: 5px;
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 13px; font-weight: 500;
+    color: var(--color-text-primary);
+    cursor: pointer;
+  }
+  .loc-pill i { font-size: 14px; color: var(--color-text-secondary); }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #2e9e5e; display: inline-block;
+    animation: pulse 1.5s ease infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .alert-banner {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 16px;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 14px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+  .alert-banner.good { background: #eaf3de; color: #3B6D11; border: 0.5px solid #97C459; }
+  .alert-banner.moderate { background: #FAEEDA; color: #854F0B; border: 0.5px solid #EF9F27; }
+  .alert-banner.unhealthy { background: #FAECE7; color: #993C1D; border: 0.5px solid #F0997B; }
+  .alert-banner.hazardous { background: #FCEBEB; color: #A32D2D; border: 0.5px solid #E24B4A; }
+  .alert-banner i { font-size: 18px; }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 14px 16px;
+  }
+  .card-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .card-label i { font-size: 13px; }
+  .card-value { font-size: 26px; font-weight: 500; color: var(--color-text-primary); line-height: 1; }
+  .card-unit { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; }
+  .card-trend { font-size: 12px; margin-top: 6px; }
+  .trend-up { color: #A32D2D; }
+  .trend-dn { color: #3B6D11; }
+  .trend-eq { color: var(--color-text-secondary); }
+
+  .aqi-ring-wrap {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 8px 0;
+  }
+  .aqi-ring-label { font-size: 12px; color: var(--color-text-secondary); margin-top: 6px; }
+  .aqi-ring-main { font-size: 38px; font-weight: 500; line-height: 1; }
+
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .bar-label { font-size: 12px; color: var(--color-text-secondary); width: 40px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 7px; background: var(--color-background-secondary); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+  .bar-val { font-size: 12px; font-weight: 500; color: var(--color-text-primary); width: 36px; text-align: right; flex-shrink: 0; }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .health-tip {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 8px;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    font-size: 13px;
+    color: var(--color-text-primary);
+    line-height: 1.5;
+  }
+  .health-tip i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .tip-who { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+
+  .forecast-strip {
+    display: flex; gap: 8px; overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .forecast-cell {
+    flex: 1; min-width: 68px;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 10px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .forecast-cell:hover { border-color: var(--color-border-secondary); }
+  .forecast-cell.active { border-color: #378ADD; background: #E6F1FB; }
+  .fc-day { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .fc-aqi { font-size: 18px; font-weight: 500; }
+  .fc-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-top: 4px;
+    display: inline-block;
+  }
+  .fc-good { color: #3B6D11; background: #eaf3de; }
+  .fc-mod { color: #854F0B; background: #FAEEDA; }
+  .fc-unh { color: #993C1D; background: #FAECE7; }
+  .fc-haz { color: #A32D2D; background: #FCEBEB; }
+
+  .hotspot-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    font-size: 13px;
+  }
+  .hotspot-row:last-child { border-bottom: none; }
+  .hotspot-name { color: var(--color-text-primary); font-weight: 500; }
+  .hotspot-sub { font-size: 11px; color: var(--color-text-secondary); }
+  .hotspot-badge {
+    font-size: 11px; font-weight: 500;
+    padding: 3px 8px; border-radius: 10px;
+  }
+
+  .map-placeholder {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    height: 170px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .map-label { font-size: 13px; color: var(--color-text-secondary); }
+  .map-dot {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.55;
+  }
+  .map-center-pin {
+    position: absolute;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #E24B4A;
+    border: 2px solid white;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+  .map-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid #E24B4A;
+    opacity: 0.25;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: ring-expand 2s ease-out infinite;
+  }
+  @keyframes ring-expand { 0%{width:14px;height:14px;opacity:0.4} 100%{width:80px;height:80px;opacity:0} }
+
+  .map-tag {
+    position: absolute;
+    font-size: 10px;
+    padding: 3px 7px;
+    border-radius: 8px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .action-btn {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: var(--border-radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    transition: background 0.15s;
+    margin-top: 8px;
+  }
+  .action-btn:hover { background: var(--color-background-secondary); }
+  .action-btn i { font-size: 15px; }
+
+  .mini-chart { position: relative; height: 52px; margin-top: 8px; }
+  canvas.sparkline { width: 100% !important; }
+
+  .source-note { font-size: 11px; color: var(--color-text-secondary); text-align: right; margin-top: 8px; }
+
+  .toggle-row { display: flex; gap: 6px; margin-bottom: 10px; }
+  .tog-btn {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-primary);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tog-btn.on { background: #E6F1FB; border-color: #378ADD; color: #185FA5; font-weight: 500; }
+
+  .exposure-scale {
+    display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin: 6px 0;
+  }
+  .scale-seg { flex: 1; }
+
+  .commute-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 0;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .commute-row:last-child { border-bottom: none; }
+  .commute-icon { font-size: 20px; color: var(--color-text-secondary); }
+  .commute-info { flex: 1; }
+  .commute-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .commute-desc { font-size: 11px; color: var(--color-text-secondary); }
+  .commute-score {
+    font-size: 13px; font-weight: 500;
+    padding: 3px 10px; border-radius: 10px;
+  }
+</style>
+
+<div class="db">
+  <h2 class="sr-only">Pollution dashboard — real-time air quality and health impact for your city</h2>
+
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <span class="live-dot"></span>
+      <h1>AirWatch</h1>
+      <span>Live · Updated just now</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="loc-pill" onclick="cycleCity()">
+        <i class="ti ti-map-pin" aria-hidden="true"></i>
+        <span id="city-name">Noida, UP</span>
+        <i class="ti ti-chevron-down" aria-hidden="true"></i>
+      </div>
+      <div class="loc-pill" onclick="sendPrompt('Show me indoor air quality tips for high pollution days')">
+        <i class="ti ti-settings" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert-banner unhealthy" id="alert-banner">
+    <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+    <div>
+      <span id="alert-text">Unhealthy air today — sensitive groups should limit outdoor activity.</span>
+      <span style="font-size:11px;opacity:0.75;margin-left:6px;">Tap for advice ↓</span>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card" style="grid-column: span 1;">
+      <div class="aqi-ring-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#F09595" stroke-width="10" stroke-dasharray="276.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 55 55)" opacity="0.2"/>
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#E24B4A" stroke-width="10" stroke-dasharray="276.5" stroke-dashoffset="82" stroke-linecap="round" transform="rotate(-90 55 55)" id="aqi-arc"/>
+          <text x="55" y="50" text-anchor="middle" font-size="28" font-weight="500" fill="var(--color-text-primary)" id="aqi-num">158</text>
+          <text x="55" y="65" text-anchor="middle" font-size="10" fill="var(--color-text-secondary)">AQI</text>
+        </svg>
+        <div class="aqi-ring-label" id="aqi-cat" style="color:#A32D2D;font-weight:500;">Unhealthy</div>
+      </div>
+    </div>
+
+    <div class="card" style="grid-column: span 2;">
+      <div class="card-label"><i class="ti ti-molecule" aria-hidden="true"></i> Pollutant breakdown</div>
+      <div style="margin-top: 6px;" id="bars-container">
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-4">
+    <div class="card">
+      <div class="card-label"><i class="ti ti-eye" aria-hidden="true"></i> Visibility</div>
+      <div class="card-value" id="vis-val">3.2</div>
+      <div class="card-unit">km</div>
+      <div class="card-trend trend-dn" id="vis-trend"><i class="ti ti-arrow-down-right" aria-hidden="true"></i> Down 1.8km</div>
+    </div>
+    <div class="card">
+      <div class="card-label"><i class="ti ti-thermometer" aria-hidden="true"></i> Temperature</div>
+      <div class="card-value" id="temp-val">34</div>
+      <div class="card-unit">°C · feels like 38°C</div>
+      <div class="card-trend trend-up"><i class="ti ti-arrow-up-right" aria-hidden="true"></i> +2°C vs yesterday</div>
+    </div>
+    <div class="card">
+      <div class="card-label"><i class="ti ti-droplet" aria-hidden="true"></i> Humidity</div>
+      <div class="card-value" id="hum-val">68</div>
+      <div class="card-unit">% relative</div>
+      <div class="card-trend trend-up"><i class="ti ti-arrow-up-right" aria-hidden="true"></i> +5% · traps pollutants</div>
+    </div>
+    <div class="card">
+      <div class="card-label"><i class="ti ti-wind" aria-hidden="true"></i> Wind</div>
+      <div class="card-value" id="wind-val">7</div>
+      <div class="card-unit">km/h · NW</div>
+      <div class="card-trend trend-dn"><i class="ti ti-arrow-down-right" aria-hidden="true"></i> Low dispersal today</div>
+    </div>
+  </div>
+
+  <div class="map-placeholder">
+    <div class="map-dot" style="width:90px;height:90px;background:#E24B4A;top:30%;left:44%;"></div>
+    <div class="map-dot" style="width:60px;height:60px;background:#EF9F27;top:55%;left:20%;"></div>
+    <div class="map-dot" style="width:50px;height:50px;background:#EF9F27;top:20%;left:65%;"></div>
+    <div class="map-dot" style="width:40px;height:40px;background:#97C459;top:65%;left:70%;"></div>
+    <div class="map-dot" style="width:30px;height:30px;background:#97C459;top:15%;left:15%;"></div>
+    <div class="map-dot" style="width:45px;height:45px;background:#E24B4A;top:48%;left:52%;"></div>
+    <div class="map-center-pin"></div>
+    <div class="map-ring"></div>
+    <div class="map-tag" style="top:28%;left:42%;background:#FCEBEB;color:#A32D2D;border:0.5px solid #F09595;">AQI 158</div>
+    <div class="map-tag" style="top:52%;left:18%;background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27;">AQI 112</div>
+    <div class="map-tag" style="top:18%;left:63%;background:#FAEEDA;color:#854F0B;border:0.5px solid #EF9F27;">AQI 98</div>
+    <div class="map-tag" style="top:62%;left:68%;background:#eaf3de;color:#3B6D11;border:0.5px solid #97C459;">AQI 45</div>
+    <div style="position:absolute;bottom:10px;right:12px;font-size:11px;color:var(--color-text-secondary);">
+      <i class="ti ti-map-2" aria-hidden="true"></i> Live heat map · tap to expand
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label"><i class="ti ti-calendar-week" aria-hidden="true"></i> 7-day forecast</div>
+      <div class="forecast-strip" id="forecast-strip"></div>
+      <button class="action-btn" onclick="sendPrompt('Give me a week-by-week air quality outlook and what weather patterns drive it')">
+        <i class="ti ti-chart-line" aria-hidden="true"></i> Detailed outlook ↗
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-label"><i class="ti ti-flame" aria-hidden="true"></i> Pollution hotspots nearby</div>
+      <div id="hotspots"></div>
+      <button class="action-btn" onclick="sendPrompt('What are the main pollution sources near Noida and what can residents do about them?')">
+        <i class="ti ti-map-search" aria-hidden="true"></i> Explore sources ↗
+      </button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom: 14px;">
+    <div class="card-label"><i class="ti ti-route" aria-hidden="true"></i> Commute exposure guide</div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;">Estimated pollution inhaled on a 30-min route today</div>
+    <div id="commute-rows"></div>
+    <button class="action-btn" onclick="sendPrompt('How can I reduce my pollution exposure during my daily commute in a high AQI city?')">
+      <i class="ti ti-shield-check" aria-hidden="true"></i> Get personalised route advice ↗
+    </button>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i> Health recommendations</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;">For today's conditions (AQI 158)</div>
+      <div id="health-tips"></div>
+      <button class="action-btn" onclick="sendPrompt('What masks or air purifiers are most effective for PM2.5 levels around AQI 150-200?')">
+        <i class="ti ti-shield" aria-hidden="true"></i> Gear recommendations ↗
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-label"><i class="ti ti-clock-hour-4" aria-hidden="true"></i> Best times to go outside</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;">Hourly AQI forecast · today</div>
+      <div id="hour-bars"></div>
+      <div class="exposure-scale" style="margin-top:10px;">
+        <div class="scale-seg" style="background:#639922;"></div>
+        <div class="scale-seg" style="background:#EF9F27;"></div>
+        <div class="scale-seg" style="background:#E24B4A;"></div>
+        <div class="scale-seg" style="background:#A32D2D;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--color-text-secondary);margin-top:3px;">
+        <span>Good</span><span>Moderate</span><span>Unhealthy</span><span>Hazardous</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="source-note">
+    Simulated data · sensor network model · values auto-update every 10 min
+  </div>
+</div>
+
+<script>
+const cities = ['Noida, UP','Delhi NCR','Gurgaon, HR','Lucknow, UP','Kanpur, UP'];
+let cityIdx = 0;
+
+const pollutants = [
+  { name:'PM2.5', val:89, max:150, color:'#E24B4A' },
+  { name:'PM10',  val:134, max:250, color:'#BA7517' },
+  { name:'NO₂',   val:62, max:100, color:'#985BA0' },
+  { name:'CO',    val:38, max:100, color:'#378ADD' },
+  { name:'O₃',    val:55, max:100, color:'#3B6D11' },
+  { name:'SO₂',   val:22, max:100, color:'#D85A30' },
+];
+
+const forecast = [
+  { day:'Today', aqi:158, cat:'unh' },
+  { day:'Sun',   aqi:144, cat:'unh' },
+  { day:'Mon',   aqi:105, cat:'mod' },
+  { day:'Tue',   aqi:88,  cat:'mod' },
+  { day:'Wed',   aqi:52,  cat:'good' },
+  { day:'Thu',   aqi:67,  cat:'mod' },
+  { day:'Fri',   aqi:121, cat:'mod' },
+];
+
+const hotspots = [
+  { name:'NH-24 Corridor', sub:'Heavy truck traffic · diesel exhaust', aqi:190, cat:'unh' },
+  { name:'Sector 14 Industrial', sub:'Factory emissions · 1.2 km away', aqi:165, cat:'unh' },
+  { name:'Sector 62 Junction', sub:'Traffic congestion · PM2.5 spike', aqi:130, cat:'mod' },
+  { name:'Okhla Bird Sanctuary', sub:'Green buffer zone · 4 km away', aqi:48, cat:'good' },
+];
+
+const tips = [
+  { icon:'ti-mask', color:'#378ADD', text:'Wear N95/FFP2 mask outdoors', who:'Everyone' },
+  { icon:'ti-run-off', color:'#A32D2D', text:'Avoid outdoor exercise — exercise indoors instead', who:'Everyone, especially athletes' },
+  { icon:'ti-baby-carriage', color:'#A32D2D', text:'Keep children indoors and windows closed', who:'Parents / caregivers' },
+  { icon:'ti-lungs', color:'#993C1D', text:'Carry rescue inhaler and check it\'s not expired', who:'Asthma & respiratory patients' },
+  { icon:'ti-plant', color:'#3B6D11', text:'Place air purifier with HEPA on High mode indoors', who:'Indoor tip for all' },
+];
+
+const commutes = [
+  { icon:'ti-walk', name:'Walking', desc:'Maximum exposure · no filtering', score:'Avoid', sc:'unh' },
+  { icon:'ti-motorbike', name:'Two-wheeler', desc:'Moderate exposure · wear N95', score:'Caution', sc:'mod' },
+  { icon:'ti-bus', name:'Public bus', desc:'Lower than open air · windows closed', score:'Moderate', sc:'mod' },
+  { icon:'ti-car', name:'Private car (AC)', desc:'Best option · recirculate air', score:'Best', sc:'good' },
+  { icon:'ti-bike', name:'Cycling', desc:'High breathing rate increases intake', score:'Avoid', sc:'unh' },
+];
+
+const hourData = [
+  {h:'6am',aqi:120},{h:'8am',aqi:162},{h:'10am',aqi:158},
+  {h:'12pm',aqi:145},{h:'2pm',aqi:135},{h:'4pm',aqi:148},
+  {h:'6pm',aqi:170},{h:'8pm',aqi:155},{h:'10pm',aqi:138},
+];
+
+function catColor(cat) {
+  if(cat==='good') return {bg:'#eaf3de',fg:'#3B6D11',border:'#97C459'};
+  if(cat==='mod')  return {bg:'#FAEEDA',fg:'#854F0B',border:'#EF9F27'};
+  if(cat==='unh')  return {bg:'#FAECE7',fg:'#993C1D',border:'#F0997B'};
+  return {bg:'#FCEBEB',fg:'#A32D2D',border:'#E24B4A'};
+}
+
+function renderBars() {
+  const c = document.getElementById('bars-container');
+  c.innerHTML = pollutants.map(p => {
+    const pct = Math.min(100, Math.round(p.val / p.max * 100));
+    return `<div class="bar-row">
+      <div class="bar-label">${p.name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${p.color};"></div></div>
+      <div class="bar-val">${p.val}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderForecast() {
+  const strip = document.getElementById('forecast-strip');
+  strip.innerHTML = forecast.map((f, i) => {
+    const c = catColor(f.cat);
+    const activeClass = i === 0 ? 'active' : '';
+    return `<div class="forecast-cell ${activeClass}" onclick="selectDay(this, ${i})">
+      <div class="fc-day">${f.day}</div>
+      <div class="fc-aqi">${f.aqi}</div>
+      <div class="fc-badge fc-${f.cat}">${f.cat==='good'?'Good':f.cat==='mod'?'Moderate':f.cat==='unh'?'Unhealthy':'Hazardous'}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectDay(el, idx) {
+  document.querySelectorAll('.forecast-cell').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function renderHotspots() {
+  const h = document.getElementById('hotspots');
+  h.innerHTML = hotspots.map(s => {
+    const c = catColor(s.cat==='unh'?'unh':s.cat==='good'?'good':'mod');
+    return `<div class="hotspot-row">
+      <div>
+        <div class="hotspot-name">${s.name}</div>
+        <div class="hotspot-sub">${s.sub}</div>
+      </div>
+      <div class="hotspot-badge" style="background:${c.bg};color:${c.fg};border:0.5px solid ${c.border};">AQI ${s.aqi}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTips() {
+  const t = document.getElementById('health-tips');
+  t.innerHTML = tips.map(tip => `
+    <div class="health-tip">
+      <i class="ti ${tip.icon}" style="color:${tip.color};" aria-hidden="true"></i>
+      <div>
+        <div>${tip.text}</div>
+        <div class="tip-who">For: ${tip.who}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderCommute() {
+  const r = document.getElementById('commute-rows');
+  r.innerHTML = commutes.map(c => {
+    const col = catColor(c.sc);
+    return `<div class="commute-row">
+      <i class="ti ${c.icon} commute-icon" aria-hidden="true"></i>
+      <div class="commute-info">
+        <div class="commute-name">${c.name}</div>
+        <div class="commute-desc">${c.desc}</div>
+      </div>
+      <div class="commute-score" style="background:${col.bg};color:${col.fg};border:0.5px solid ${col.border};">${c.score}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderHourBars() {
+  const container = document.getElementById('hour-bars');
+  const maxAqi = Math.max(...hourData.map(h => h.aqi));
+  container.innerHTML = `<div style="display:flex;align-items:flex-end;gap:4px;height:60px;">` +
+    hourData.map(h => {
+      const ht = Math.round(h.aqi / maxAqi * 52);
+      let col;
+      if(h.aqi < 50) col='#639922';
+      else if(h.aqi < 100) col='#EF9F27';
+      else if(h.aqi < 150) col='#D85A30';
+      else col='#E24B4A';
+      return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;">
+        <div style="width:100%;background:${col};border-radius:2px 2px 0 0;height:${ht}px;opacity:0.85;"></div>
+        <div style="font-size:9px;color:var(--color-text-secondary);white-space:nowrap;">${h.h}</div>
+      </div>`;
+    }).join('') + `</div>`;
+}
+
+function cycleCity() {
+  cityIdx = (cityIdx + 1) % cities.length;
+  document.getElementById('city-name').textContent = cities[cityIdx];
+}
+
+renderBars();
+renderForecast();
+renderHotspots();
+renderTips();
+renderCommute();
+renderHourBars();
+
+let tick = 0;
+setInterval(() => {
+  tick++;
+  const jitter = () => Math.round((Math.random() - 0.5) * 6);
+  const aqiEl = document.getElementById('aqi-num');
+  const curAqi = parseInt(aqiEl.textContent) + jitter();
+  const clamped = Math.max(120, Math.min(200, curAqi));
+  aqiEl.textContent = clamped;
+  const arc = document.getElementById('aqi-arc');
+  const offset = 276.5 - (clamped / 300 * 276.5);
+  arc.setAttribute('stroke-dashoffset', Math.round(offset));
+  pollutants[0].val = Math.max(60, Math.min(130, pollutants[0].val + jitter()));
+  pollutants[1].val = Math.max(90, Math.min(180, pollutants[1].val + jitter()));
+  renderBars();
+}, 4000);
+</script>
