@@ -33,7 +33,19 @@ These charts help summarise whether one dataset is consistently estimating highe
 
 ## Purpose
 
-The purpose of these visualisations is to support exploratory comparison between two PM2.5 datasets. Since WUSTL and WRF-Chem are generated using different modelling approaches, their estimates can vary across space. These HTML outputs make those differences easier to inspect both visually and quantitatively.
+I essentially developed this to compare pollution estimates from the WUSTL and WRF-Chem datasets over Delhi. The purpose of this pipeline was to move beyond simply plotting the datasets separately and instead create a systematic way to evaluate how differently the two sources estimate PM₂.₅ over the same region.
+
+The pipeline first loads and cleans the WUSTL monthly PM₂.₅ dataset and the WRF-Chem 2017 dataset. Since the original WRF-Chem file covers a larger spatial extent, it is cropped to an approximate Delhi bounding box so that the comparison remains focused on the study area. The WRF-Chem data is then aggregated by month and grid location to make it comparable with the monthly WUSTL values.
+
+A key challenge was that WUSTL and WRF-Chem do not share identical grid structures. To address this, I used a nearest-neighbour spatial matching approach. For each month, every WUSTL point was matched to the nearest WRF-Chem grid point within a defined distance threshold. This allowed the two datasets to be compared at approximately corresponding spatial locations rather than being treated as unrelated layers.
+
+After matching the datasets, the pipeline calculates the difference between them as:
+
+Δ = WUSTL PM₂.₅ − WRF-Chem PM₂.₅
+
+It also calculates the absolute difference, percentage difference, and distance to the nearest WRF-Chem grid point. These values help quantify whether WUSTL is consistently estimating higher or lower PM₂.₅ than WRF-Chem, and whether the difference appears systematic or scattered across space.
+
+The pipeline then produces two main outputs. First, it generates an interactive HTML map where WRF-Chem grid cells are shown alongside matched WUSTL points. Each point is coloured by the delta value, making it easy to identify where WUSTL estimates are higher or lower than WRF-Chem. The popup for each point displays the WUSTL value, WRF-Chem value, delta, percentage difference, and nearest-neighbour distance. Second, the pipeline generates chart-based summaries, including a WUSTL vs WRF-Chem scatter plot, a histogram of delta values, a boxplot of delta by region, and a mean delta chart. Together, these outputs make the comparison both spatial and quantitative.
 
 ## How to View
 
